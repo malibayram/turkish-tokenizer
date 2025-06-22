@@ -1,0 +1,34 @@
+# Include README
+include README.md
+
+# Include license
+include LICENSE
+
+# Include Turkish tokenizer data files
+recursive-include turkish_tokenizer/turkish_tokenizer *.json
+recursive-include turkish_tokenizer/turkish_tokenizer *.model
+recursive-include turkish_tokenizer/turkish_tokenizer *.txt
+
+# Include Rust source files
+recursive-include turkish_tokenizer/turkish_tokenizer/src *.rs
+recursive-include turkish_tokenizer/turkish_tokenizer/Cargo.toml
+recursive-include turkish_tokenizer/turkish_tokenizer/Cargo.lock
+
+# Include tests
+recursive-include tests *.py
+
+# Exclude build artifacts
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.egg-info
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude dist
+global-exclude build
+global-exclude target 

@@ -1,0 +1,29 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include pyproject.toml
+include setup.py
+include version.py
+
+# Include JSON dictionary files
+include *.json
+
+# Include Rust source files for reference
+recursive-include src *.rs
+include Cargo.toml
+include Cargo.lock
+
+# Include Python source files
+recursive-include turkish_tokenizer *.py
+
+# Exclude build artifacts
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude target/
+global-exclude *.egg-info/
+global-exclude .eggs/
+global-exclude dist/
+global-exclude build/ 
