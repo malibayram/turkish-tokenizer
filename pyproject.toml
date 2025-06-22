@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "turkish-tokenizer"
-version = "0.1.1"
+version = "0.1.4"
 description = "High-performance Turkish tokenizer with Rust backend and Python wrapper"
 readme = "README.md"
 license = {text = "MIT"}

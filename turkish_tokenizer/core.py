@@ -12,7 +12,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Load JSON files into memory
 def load_json(file_path: str) -> Dict[str, int]:
-    full_path = os.path.join(CURRENT_DIR, "turkish_tokenizer", file_path)
+    full_path = os.path.join(CURRENT_DIR, file_path)
     with open(full_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 

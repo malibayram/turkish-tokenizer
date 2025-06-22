@@ -5,14 +5,14 @@ include README.md
 include LICENSE
 
 # Include Turkish tokenizer data files
-recursive-include turkish_tokenizer/turkish_tokenizer *.json
-recursive-include turkish_tokenizer/turkish_tokenizer *.model
-recursive-include turkish_tokenizer/turkish_tokenizer *.txt
+recursive-include turkish_tokenizer *.json
+recursive-include turkish_tokenizer *.model
+recursive-include turkish_tokenizer *.txt
 
-# Include Rust source files
-recursive-include turkish_tokenizer/turkish_tokenizer/src *.rs
-recursive-include turkish_tokenizer/turkish_tokenizer/Cargo.toml
-recursive-include turkish_tokenizer/turkish_tokenizer/Cargo.lock
+# Include Rust source files (if they exist)
+recursive-include turkish_tokenizer/src *.rs
+recursive-include turkish_tokenizer/Cargo.toml
+recursive-include turkish_tokenizer/Cargo.lock
 
 # Include tests
 recursive-include tests *.py
