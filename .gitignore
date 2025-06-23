@@ -98,3 +98,13 @@ htmlcov/
 # Rust
 target/
 Cargo.lock 
+
+*.safetensors
+*.pt
+*.pth
+*.pkl
+*.ptl
+*.pthl
+*.pkl
+*.ptl
+*.pthl

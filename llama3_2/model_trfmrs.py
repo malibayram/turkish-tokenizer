@@ -97,6 +97,7 @@ class LlamaAttention(nn.Module):
         self.num_key_value_groups = config.num_attention_heads // config.num_key_value_heads
         self.scaling = self.head_dim**-0.5
         self.num_attention_heads = config.num_attention_heads
+        self.num_key_value_heads = config.num_key_value_heads
 
         self.q_proj = nn.Linear(
             config.hidden_size, config.num_attention_heads * self.head_dim, bias=config.attention_bias
@@ -118,8 +119,8 @@ class LlamaAttention(nn.Module):
         xv = self.v_proj(hidden_states)
 
         xq = xq.view(batch_size, seq_len, self.num_attention_heads, self.head_dim)
-        xk = xk.view(batch_size, seq_len, self.num_key_value_groups, self.head_dim)
-        xv = xv.view(batch_size, seq_len, self.num_key_value_groups, self.head_dim)
+        xk = xk.view(batch_size, seq_len, self.num_key_value_heads, self.head_dim)
+        xv = xv.view(batch_size, seq_len, self.num_key_value_heads, self.head_dim)
 
         # Compute rotation matrix and apply RoPE to queries and keys for for training.
         freqs_cis = precompute_freqs_cis(dim=self.head_dim, seq_len=seq_len, device=hidden_states.device)
@@ -184,29 +185,37 @@ class LlamaDecoderLayer(nn.Module):
         return hidden_states
 
 class LlamaModel(nn.Module):
-    def __init__(self, config: LlamaConfig):
+    def __init__(self, config: LlamaConfig, embedding: torch.Tensor = None):
         super().__init__()
         # self.padding_idx = config.pad_token_id
         self.vocab_size = config.vocab_size
 
-        self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, dtype=config.dtype)
+        if embedding is None:
+            self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, dtype=config.dtype)
+        else:
+            self.embed_tokens = nn.Parameter(embedding, requires_grad=True)
+            self.embed_tokens = self.embed_tokens.to(config.dtype)
         self.layers = nn.ModuleList(
             [LlamaDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
         )
         self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
+        self.embedding = embedding is None
         # self.rotary_emb = LlamaRotaryEmbedding(config=config)
 
     def forward(self, input_ids: torch.Tensor):
-        hidden_states = self.embed_tokens(input_ids)
+        if self.embedding:
+            hidden_states = self.embed_tokens(input_ids)
+        else:
+            hidden_states = F.embedding(input_ids, self.embed_tokens)
         for layer in self.layers:
             hidden_states = layer(hidden_states)
         hidden_states = self.norm(hidden_states)
         return hidden_states
 
 class LlamaForCausalLM(nn.Module):
-    def __init__(self, config: LlamaConfig):
+    def __init__(self, config: LlamaConfig, embedding: torch.Tensor = None):
         super().__init__()
-        self.model = LlamaModel(config)
+        self.model = LlamaModel(config, embedding)
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=config.bias)
 
     def forward(self, input_ids: torch.Tensor):
