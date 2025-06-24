@@ -190,25 +190,19 @@ class LlamaModel(nn.Module):
         # self.padding_idx = config.pad_token_id
         self.vocab_size = config.vocab_size
 
-        if embedding is None:
-            self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, dtype=config.dtype)
-        else:
-            self.embed_tokens = nn.Parameter(embedding, requires_grad=True)
-            self.embed_tokens = self.embed_tokens.to(config.dtype)
+        self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, dtype=config.dtype)
         self.layers = nn.ModuleList(
             [LlamaDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
         )
         self.norm = LlamaRMSNorm(config.hidden_size, eps=config.rms_norm_eps)
-        self.embedding = embedding is None
         # self.rotary_emb = LlamaRotaryEmbedding(config=config)
 
     def forward(self, input_ids: torch.Tensor):
-        if self.embedding:
-            hidden_states = self.embed_tokens(input_ids)
-        else:
-            hidden_states = F.embedding(input_ids, self.embed_tokens)
+        hidden_states = self.embed_tokens(input_ids)
+
         for layer in self.layers:
             hidden_states = layer(hidden_states)
+
         hidden_states = self.norm(hidden_states)
         return hidden_states
 

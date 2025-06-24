@@ -108,3 +108,4 @@ Cargo.lock
 *.pkl
 *.ptl
 *.pthl
+*.csv
