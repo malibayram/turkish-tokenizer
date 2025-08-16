@@ -2,9 +2,8 @@ name: Publish to PyPI
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - "v*" # Trigger on version tags
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -42,11 +41,3 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: twine upload dist/*
-        if: secrets.PYPI_API_TOKEN != ''
-
-      - name: Publish to TestPyPI (optional)
-        if: secrets.TEST_PYPI_API_TOKEN != ''
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: twine upload --repository testpypi dist/*
