@@ -87,7 +87,7 @@ This project uses GitHub Actions for automated testing and publishing to PyPI. T
 2. Navigate to "Secrets and variables" → "Actions"
 3. Add the following secrets:
    - `PYPI_API_TOKEN`: Your PyPI API token (starts with `pypi-`)
-   - `PYPI_API_TOKEN`: Your TestPyPI API token (optional)
+   - `TEST_PYPI_API_TOKEN`: Your TestPyPI API token (optional)
 
 ### 2. Publishing Workflow
 

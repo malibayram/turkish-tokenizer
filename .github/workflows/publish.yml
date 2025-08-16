@@ -29,15 +29,23 @@ jobs:
       - name: Check package
         run: twine check dist/*
 
+      - name: Verify package contents
+        run: |
+          echo "Package contents:"
+          ls -la dist/
+          echo "Package metadata:"
+          python -c "import turkish_tokenizer; print(f'Version: {turkish_tokenizer.__version__}')"
+
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: twine upload dist/*
+        if: secrets.PYPI_API_TOKEN != ''
 
       - name: Publish to TestPyPI (optional)
+        if: secrets.TEST_PYPI_API_TOKEN != ''
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
         run: twine upload --repository testpypi dist/*
-        continue-on-error: true # Don't fail if TestPyPI token is not set
