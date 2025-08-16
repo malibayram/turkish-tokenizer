@@ -3,9 +3,9 @@ from typing import List
 
 class TurkishDecoder:
     # Define vowel sets as class constants for better performance
-    ALL_VOWELS = "aeıioöuü"
+    ALL_VOWELS = "aeıioöuüâ"
     INCE_VOWELS = "eiöü"  # Front vowels
-    AI_VOWELS = "aı"      # Back unrounded
+    AI_VOWELS = "aıâ"      # Back unrounded
     EI_VOWELS = "ei"      # Front unrounded  
     OU_VOWELS = "ou"      # Back rounded
     HARD_CONSONANTS = "fstkçşhp"  # Sert ünsüzler
@@ -169,27 +169,28 @@ class TurkishDecoder:
     def _select_correct_root(self, i: int, ids: List[int]) -> str:
         """Select the correct root form based on morphological context."""
         token_id = ids[i]
+        tokens = self.reverse_dict[token_id]
         
         if i >= len(ids) - 2:
-            return self.reverse_dict[token_id][0]
+            return tokens[0]
         
         next_token = self.reverse_dict[ids[i + 1]][0]
         
         if 100 <= token_id < 2080:
             if self._starts_with_vowel(next_token):
-                return self.reverse_dict[token_id][1]
+                return tokens[1]
             elif token_id <= 110 and ids[i + 1] == 20034:
-                return self.reverse_dict[token_id][2]
+                return tokens[2]
             else:
-                return self.reverse_dict[token_id][0]
+                return tokens[0]
                 
         elif 2080 <= token_id < 2315:
-            if ids[i + 1] == 20021:  # yor
-                return self.reverse_dict[token_id][1]
+            if ids[i + 1] == 20041:  # yor
+                return tokens[1]
             else:
-                return self.reverse_dict[token_id][0]
+                return tokens[0]
         
-        return self.reverse_dict[token_id][0]
+        return tokens[0]
 
     def decode(self, ids: List[int]) -> str:
         """Decode a list of token IDs to text."""
@@ -211,14 +212,14 @@ class TurkishDecoder:
                 text_parts.append("▁u▁")
             elif token_id in self.reverse_dict:
                 tokens = self.reverse_dict[token_id]
-                if len(tokens) > 1 and i > 0:
+                if len(tokens) > 1:
                     if token_id < 20000:  # root token
                         text_parts.append(self._select_correct_root(i, ids))
                     else:  # suffix token
                         j = -1
                         prev_token = text_parts[j]
                         # while prev_token is not a word, get the previous token
-                        while not prev_token.isalpha() and j > -len(text_parts):
+                        while not prev_token.isalpha() and j < 0:
                             prev_token = text_parts[j]
                             j -= 1
                         text_parts.append(self._select_correct_suffix(i, ids, prev_token))
