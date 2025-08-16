@@ -39,7 +39,9 @@ class TurkishTokenizer:
             self.reverse_dict[value].append(key)
 
         self.decoder = TurkishDecoder(self.reverse_dict)
+
         self.vocab_size = len(self.reverse_dict)
+
         self.max_root_len = max(len(k) for k in roots) if roots else 0
         self.max_suffix_len = max(len(k) for k in suffixes) if suffixes else 0
         self.max_bpe_len = max(len(k) for k in bpe_tokens) if bpe_tokens else 0
