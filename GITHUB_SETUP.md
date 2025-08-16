@@ -34,9 +34,10 @@ If you want to also publish to TestPyPI for testing:
    - Create an account if you don't have one
    - Add an API token similar to PyPI
 
-  2. **Add to GitHub secrets:**
-   - Name: `TEST_PYPI_API_TOKEN`
-   - Value: Your TestPyPI token
+2. **Add to GitHub secrets:**
+
+- Name: `TEST_PYPI_API_TOKEN`
+- Value: Your TestPyPI token
 
 ## 📦 Publishing Workflows
 
