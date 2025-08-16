@@ -216,12 +216,15 @@ class TurkishDecoder:
                     if token_id < 20000:  # root token
                         text_parts.append(self._select_correct_root(i, ids))
                     else:  # suffix token
-                        j = -1
-                        prev_token = text_parts[j]
-                        # while prev_token is not a word, get the previous token
-                        while not prev_token.isalpha() and j < 0:
-                            prev_token = text_parts[j]
+                        # Find the previous word token
+                        prev_token = ""
+                        j = len(text_parts) - 1
+                        while j >= 0:
+                            if text_parts[j].isalpha():
+                                prev_token = text_parts[j]
+                                break
                             j -= 1
+
                         text_parts.append(self._select_correct_suffix(i, ids, prev_token))
                 else:
                     text_parts.append(tokens[0])
