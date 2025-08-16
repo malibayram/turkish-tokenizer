@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test test-cov lint format clean build publish version-bump version-patch version-minor version-major
+.PHONY: help install install-dev test test-cov lint format clean build publish version-bump version-patch version-minor version-major release
 
 help: ## Show this help message
 	@echo "Turkish Tokenizer - Development Commands"
@@ -61,6 +61,9 @@ version-major: ## Bump major version (0.1.9 -> 1.0.0)
 
 version-set: ## Set version to specific value (usage: make version-set VERSION=1.0.0)
 	python scripts/version_manager.py set $(VERSION)
+
+release: ## Create a new release and tag for automated publishing
+	python scripts/create_release.py
 
 check: ## Run all checks (lint, test, format)
 	$(MAKE) lint

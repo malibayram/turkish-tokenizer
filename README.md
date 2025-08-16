@@ -77,6 +77,32 @@ for token in token_details:
 - [ ] Web API desteği
 - [ ] Docker entegrasyonu
 
+## GitHub Actions Setup
+
+This project uses GitHub Actions for automated testing and publishing to PyPI. To set up automated publishing:
+
+### 1. Add PyPI API Token to GitHub Secrets
+
+1. Go to your GitHub repository settings
+2. Navigate to "Secrets and variables" → "Actions"
+3. Add the following secrets:
+   - `PYPI_API_TOKEN`: Your PyPI API token (starts with `pypi-`)
+   - `PYPI_API_TOKEN`: Your TestPyPI API token (optional)
+
+### 2. Publishing Workflow
+
+The project will automatically publish to PyPI when:
+
+- A new version tag is pushed (e.g., `v0.2.1`)
+- The workflow is manually triggered from GitHub Actions
+
+### 3. Testing Workflow
+
+Tests run automatically on:
+
+- Every push to `main` or `develop` branches
+- Every pull request to `main` branch
+
 ---
 
 ## Projenin Amacı ve Kapsamı
