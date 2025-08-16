@@ -5,7 +5,7 @@ A comprehensive Turkish language tokenizer.
 Provides state-of-the-art tokenization and text generation capabilities for Turkish.
 """
 
-__version__ = "0.1.9"
+__version__ = "0.1.11"
 __author__ = "M. Ali Bayram"
 __email__ = "malibayram20@gmail.com"
 

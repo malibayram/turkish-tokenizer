@@ -15,7 +15,7 @@ def read_readme():
 
 setup(
     name="turkish-tokenizer",
-    version="0.1.9",
+    version="0.1.11",
     description="Turkish tokenizer for Turkish language processing",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
@@ -32,9 +32,16 @@ setup(
     extras_require={
         "dev": [
             "pytest>=6.0",
+            "pytest-cov>=4.0",
+            "pytest-mock>=3.0",
             "black",
             "flake8",
             "mypy",
+        ],
+        "test": [
+            "pytest>=6.0",
+            "pytest-cov>=4.0",
+            "pytest-mock>=3.0",
         ],
     },
     python_requires=">=3.8",

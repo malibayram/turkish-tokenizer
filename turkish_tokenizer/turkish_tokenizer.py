@@ -23,26 +23,23 @@ class TurkishTokenizer:
             suffixes = json.load(f)
         with open(os.path.join(package_dir, "bpe_tokenler.json"), "r", encoding="utf-8") as f:
             bpe_tokens = json.load(f)
-        self.reverse_dict = {}
-
-        for key, value in roots.items():
-            if value not in self.reverse_dict:
-                self.reverse_dict[value] = []
-            self.reverse_dict[value].append(key)
-        for key, value in suffixes.items():
-            if value not in self.reverse_dict:
-                self.reverse_dict[value] = []
-            self.reverse_dict[value].append(key)
-        for key, value in bpe_tokens.items():
-            if value not in self.reverse_dict:
-                self.reverse_dict[value] = []
-            self.reverse_dict[value].append(key)
-
-            self.decoder = TurkishDecoder(self.reverse_dict)
-
+        
+        # Store the dictionaries as instance attributes
         self.roots = roots
         self.suffixes = suffixes
         self.bpe_tokens = bpe_tokens
+        
+        # Now create vocab and reverse dict
+        self.vocab = self.get_vocab()
+        self.reverse_dict = {}
+
+        for key, value in self.vocab.items():
+            if value not in self.reverse_dict:
+                self.reverse_dict[value] = []
+            self.reverse_dict[value].append(key)
+
+        self.decoder = TurkishDecoder(self.reverse_dict)
+        self.vocab_size = len(self.reverse_dict)
         self.max_root_len = max(len(k) for k in roots) if roots else 0
         self.max_suffix_len = max(len(k) for k in suffixes) if suffixes else 0
         self.max_bpe_len = max(len(k) for k in bpe_tokens) if bpe_tokens else 0
@@ -53,6 +50,9 @@ class TurkishTokenizer:
 
         self.pad_token_id = roots["<pad>"]
         self.eos_token_id = roots["<eos>"]
+
+    def get_vocab(self) -> Dict[str, int]:
+        return {**self.roots, **self.suffixes, **self.bpe_tokens}
 
     def _tokenize_word(self, word: str) -> Tuple[List[dict], List[int]]:
         uppercase_indices = [i for i, c in enumerate(word) if c.isupper()]
