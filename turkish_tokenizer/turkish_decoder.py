@@ -35,7 +35,7 @@ class TurkishDecoder:
 
     def _ends_with_ince(self, word: str) -> bool:
         """Check if word ends with front vowels (ince ünlü)."""
-        if word in ("saat", "kilovatsaat", "ziraat", "itaat"):
+        if word in ("saat", "kilovatsaat", "ziraat", "itaat", "istikbal"):
             return True
         # check until first vowel recursively
         return self._ends_with_any(word, self.INCE_VOWELS)

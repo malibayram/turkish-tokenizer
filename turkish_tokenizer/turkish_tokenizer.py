@@ -124,7 +124,11 @@ class TurkishTokenizer:
             if cand in table:
                 return table[cand], cand
         return None, ""
-
+    def _tr_lower(self, word: str) -> str:
+        if "I" in word or "İ" in word:
+            word = word.replace("İ", "i").replace("I", "ı")
+        return word.lower()
+    
     def _camel_split_with_positions(self, word: str) -> List[Tuple[str, int]]:
         if not word:
             return []
@@ -135,13 +139,13 @@ class TurkishTokenizer:
         for i in range(1, len(word)):
             if word[i].isupper():
                 if start < i:
-                    parts.append((word[start:i].lower(), start))
+                    parts.append((self._tr_lower(word[start:i]), start))
                 start = i
         
         if start < len(word):
-            parts.append((word[start:].lower(), start))
+            parts.append((self._tr_lower(word[start:]), start))
         
-        return parts if parts else [(word.lower(), 0)]
+        return parts if parts else [(self._tr_lower(word), 0)]
 
     def decode(self, ids: List[int]) -> str:
         return self.decoder.decode(ids)
