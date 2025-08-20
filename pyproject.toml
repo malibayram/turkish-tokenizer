@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "turkish-tokenizer"
-version = "0.2.18"
+version = "0.2.19"
 description = "Turkish tokenizer for Turkish language processing"
 readme = "README.md"
 license = {text = "MIT"}
@@ -62,7 +62,7 @@ line-length = 88
 target-version = ['py38']
 
 [tool.mypy]
-python_version = "0.2.18"
+python_version = "0.2.19"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true

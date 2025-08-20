@@ -5,16 +5,18 @@ A comprehensive Turkish language tokenizer.
 Provides state-of-the-art tokenization and text generation capabilities for Turkish.
 """
 
-__version__ = "0.2.18"
+__version__ = "0.2.19"
 __author__ = "M. Ali Bayram"
 __email__ = "malibayram20@gmail.com"
 
+from .hf_turkish_tokenizer import HFTurkishTokenizer
 from .turkish_decoder import TurkishDecoder
 from .turkish_tokenizer import TokenType, TurkishTokenizer
 
 __all__ = [
     # Tokenizer
     "TurkishTokenizer",
+    "HFTurkishTokenizer",
     "TokenType",
     "TurkishDecoder",
 ]

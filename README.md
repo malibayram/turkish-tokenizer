@@ -42,6 +42,30 @@ decoded_text = tokenizer.decode(tokens)
 print("Decoded:", decoded_text)
 ```
 
+### Hugging Face Uyumlu Tokenizer
+
+```python
+from turkish_tokenizer import HFTurkishTokenizer
+
+# Hugging Face uyumlu tokenizer'ı başlat
+tokenizer = HFTurkishTokenizer()
+
+# Model girişi için hazırla
+model_inputs = tokenizer(
+    "Bu cümle model girişi için hazırlanacak.",
+    add_special_tokens=True,
+    padding=True,
+    truncation=True,
+    max_length=512,
+    return_tensors="pt"
+)
+
+print(model_inputs)
+# Output: {'input_ids': tensor([[...]]), 'attention_mask': tensor([[...]])}
+```
+
+**Hugging Face entegrasyonu hakkında daha fazla bilgi için [README_HF.md](README_HF.md) dosyasına bakın.**
+
 ### Gelişmiş Tokenizasyon
 
 ```python
