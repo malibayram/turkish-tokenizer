@@ -50,8 +50,10 @@ class TurkishTokenizer:
         self.unknown_marker = {"token": "<unknown>", "id": roots["<unknown>"], "type": TokenType.ROOT}
         self.space_marker = {"token": " ", "id": roots[" "], "type": TokenType.ROOT}
 
-        self.pad_token_id = roots["<pad>"]
-        self.eos_token_id = roots["<eos>"]
+        self.pad_token = "<pad>"
+        self.eos_token = "<eos>"
+        self.pad_token_id = roots[self.pad_token]
+        self.eos_token_id = roots[self.eos_token]
 
     def get_vocab(self) -> Dict[str, int]:
         return {**self.roots, **self.suffixes, **self.bpe_tokens}
