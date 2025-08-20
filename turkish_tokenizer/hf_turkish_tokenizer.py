@@ -12,11 +12,50 @@ except ImportError:
     TRANSFORMERS_AVAILABLE = False
     # Create dummy classes for when transformers is not available
     class PreTrainedTokenizer:
-        pass
+        def __init__(self, **kwargs):
+            # Initialize with basic attributes
+            self.vocab_file = kwargs.get('vocab_file')
+            self.model_max_length = kwargs.get('model_max_length')
+            self.padding_side = kwargs.get('padding_side', 'right')
+            self.truncation_side = kwargs.get('truncation_side', 'right')
+            self.clean_up_tokenization_spaces = kwargs.get('clean_up_tokenization_spaces', True)
+            self.split_special_tokens = kwargs.get('split_special_tokens', False)
+            
+            # Initialize special tokens
+            self.pad_token = None
+            self.eos_token = None
+            self.unk_token = None
+            self.bos_token = None
+            self.sep_token = None
+            self.cls_token = None
+            self.mask_token = None
+            self.additional_special_tokens = []
+            self.all_special_tokens = []
+            
+        def add_special_tokens(self, special_tokens_dict):
+            """Dummy method for adding special tokens."""
+            pass
+            
     class BatchEncoding:
         def __init__(self, data, tensor_type=None):
             self.data = data
             self.tensor_type = tensor_type
+            
+        def __getitem__(self, key):
+            return self.data[key]
+            
+        def __contains__(self, key):
+            return key in self.data
+            
+        def keys(self):
+            return self.data.keys()
+            
+        def values(self):
+            return self.data.values()
+            
+        def items(self):
+            return self.data.items()
+            
     class TruncationStrategy:
         pass
     class PaddingStrategy:

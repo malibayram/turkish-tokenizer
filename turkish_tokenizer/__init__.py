@@ -5,7 +5,7 @@ A comprehensive Turkish language tokenizer.
 Provides state-of-the-art tokenization and text generation capabilities for Turkish.
 """
 
-__version__ = "0.2.20"
+__version__ = "0.2.21"
 __author__ = "M. Ali Bayram"
 __email__ = "malibayram20@gmail.com"
 
@@ -16,7 +16,7 @@ from .turkish_tokenizer import TokenType, TurkishTokenizer
 try:
     from .hf_turkish_tokenizer import HFTurkishTokenizer
     HF_TOKENIZER_AVAILABLE = True
-except ImportError:
+except (ImportError, TypeError):
     HF_TOKENIZER_AVAILABLE = False
     HFTurkishTokenizer = None
 
