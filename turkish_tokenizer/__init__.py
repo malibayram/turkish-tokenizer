@@ -5,21 +5,31 @@ A comprehensive Turkish language tokenizer.
 Provides state-of-the-art tokenization and text generation capabilities for Turkish.
 """
 
-__version__ = "0.2.19"
+__version__ = "0.2.20"
 __author__ = "M. Ali Bayram"
 __email__ = "malibayram20@gmail.com"
 
-from .hf_turkish_tokenizer import HFTurkishTokenizer
 from .turkish_decoder import TurkishDecoder
 from .turkish_tokenizer import TokenType, TurkishTokenizer
+
+# Conditionally import HFTurkishTokenizer if transformers is available
+try:
+    from .hf_turkish_tokenizer import HFTurkishTokenizer
+    HF_TOKENIZER_AVAILABLE = True
+except ImportError:
+    HF_TOKENIZER_AVAILABLE = False
+    HFTurkishTokenizer = None
 
 __all__ = [
     # Tokenizer
     "TurkishTokenizer",
-    "HFTurkishTokenizer",
     "TokenType",
     "TurkishDecoder",
 ]
+
+# Add HFTurkishTokenizer to __all__ only if available
+if HF_TOKENIZER_AVAILABLE:
+    __all__.append("HFTurkishTokenizer")
 
 # Package metadata
 __title__ = "turkish-tokenizer"

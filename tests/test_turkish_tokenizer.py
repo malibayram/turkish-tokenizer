@@ -240,6 +240,20 @@ class TestTurkishTokenizer:
         assert tokenizer.pad_token_id >= 0
         assert tokenizer.eos_token_id >= 0
 
+    def test_callable_interface(self, tokenizer):
+        """Test that tokenizer instances are callable and return expected format."""
+        text = "kitap masa"
+        result = tokenizer(text)
+        
+        assert isinstance(result, dict)
+        assert "input_ids" in result
+        assert "attention_mask" in result
+        assert isinstance(result["input_ids"], list)
+        assert isinstance(result["attention_mask"], list)
+        assert len(result["input_ids"]) == len(result["attention_mask"])
+        assert all(isinstance(x, int) for x in result["input_ids"])
+        assert all(x == 1 for x in result["attention_mask"])
+
 
 class TestTurkishTokenizerEdgeCases:
     """Test edge cases and error conditions."""

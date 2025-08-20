@@ -2,10 +2,25 @@ import json
 import os
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from transformers import PreTrainedTokenizer
-from transformers.tokenization_utils_base import (BatchEncoding,
-                                                  TruncationStrategy)
-from transformers.utils import PaddingStrategy
+try:
+    from transformers import PreTrainedTokenizer
+    from transformers.tokenization_utils_base import (BatchEncoding,
+                                                      TruncationStrategy)
+    from transformers.utils import PaddingStrategy
+    TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    TRANSFORMERS_AVAILABLE = False
+    # Create dummy classes for when transformers is not available
+    class PreTrainedTokenizer:
+        pass
+    class BatchEncoding:
+        def __init__(self, data, tensor_type=None):
+            self.data = data
+            self.tensor_type = tensor_type
+    class TruncationStrategy:
+        pass
+    class PaddingStrategy:
+        pass
 
 from .turkish_tokenizer import TurkishTokenizer
 
