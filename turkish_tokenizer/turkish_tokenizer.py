@@ -159,3 +159,9 @@ class TurkishTokenizer:
 
     def decode(self, ids: List[int]) -> str:
         return self.decoder.decode(ids)
+
+    # added to be compatible with SFTTrainer
+    def __call__(self, text: str) -> Dict[str, List[int]]:
+        input_ids = self.encode(text)
+        attention_mask = [1 for _ in input_ids]
+        return {"input_ids": input_ids, "attention_mask": attention_mask}
