@@ -50,11 +50,19 @@ class TurkishTokenizer:
         self.unknown_marker = {"token": "<unknown>", "id": roots["<unknown>"], "type": TokenType.ROOT}
         self.space_marker = {"token": " ", "id": roots[" "], "type": TokenType.ROOT}
 
+        # added to be compatible with SFTTrainer
         self.pad_token = "<pad>"
         self.eos_token = "<eos>"
         self.pad_token_id = roots[self.pad_token]
         self.eos_token_id = roots[self.eos_token]
 
+    # added to be compatible with SFTTrainer
+    def convert_tokens_to_ids(self, tokens: List[str]) -> List[int]:
+        return [self.vocab[token] for token in tokens]
+    # added to be compatible with SFTTrainer
+    def convert_ids_to_tokens(self, ids: List[int]) -> List[str]:
+        return [self.reverse_dict[id] for id in ids]
+    
     def get_vocab(self) -> Dict[str, int]:
         return {**self.roots, **self.suffixes, **self.bpe_tokens}
 
