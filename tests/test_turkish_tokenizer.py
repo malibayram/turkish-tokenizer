@@ -254,6 +254,32 @@ class TestTurkishTokenizer:
         assert all(isinstance(x, int) for x in result["input_ids"])
         assert all(x == 1 for x in result["attention_mask"])
 
+    def test_no_intersection_between_token_dictionaries(self, tokenizer):
+        """Test that there are no overlapping keys between kokler, ekler, and bpe_tokenler."""
+        kokler = tokenizer.roots
+        ekler = tokenizer.suffixes
+        bpe_tokenler = tokenizer.bpe_tokens
+        
+        # Check for intersections between kokler and ekler
+        kokler_ekler_intersection = set(kokler.keys()) & set(ekler.keys())
+        if kokler_ekler_intersection:
+            pytest.fail(f"Found overlapping keys between kokler and ekler: {kokler_ekler_intersection}")
+        
+        # Check for intersections between kokler and bpe_tokenler
+        kokler_bpe_intersection = set(kokler.keys()) & set(bpe_tokenler.keys())
+        if kokler_bpe_intersection:
+            pytest.fail(f"Found overlapping keys between kokler and bpe_tokenler: {kokler_bpe_intersection}")
+        
+        # Check for intersections between ekler and bpe_tokenler
+        ekler_bpe_intersection = set(ekler.keys()) & set(bpe_tokenler.keys())
+        if ekler_bpe_intersection:
+            pytest.fail(f"Found overlapping keys between ekler and bpe_tokenler: {ekler_bpe_intersection}")
+        
+        # All intersections should be empty
+        assert len(kokler_ekler_intersection) == 0, "kokler and ekler should not have overlapping keys"
+        assert len(kokler_bpe_intersection) == 0, "kokler and bpe_tokenler should not have overlapping keys"
+        assert len(ekler_bpe_intersection) == 0, "ekler and bpe_tokenler should not have overlapping keys"
+
 
 class TestTurkishTokenizerEdgeCases:
     """Test edge cases and error conditions."""

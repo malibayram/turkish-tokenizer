@@ -1,18 +1,20 @@
-name: Publish to PyPI
+name: Manual Publish
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish"
+        required: true
+        default: "0.2.20"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -25,20 +27,16 @@ jobs:
           pip install build twine
 
       - name: Build package
-        run: python -m build
+        run: |
+          python -m build
 
       - name: Check package
-        run: twine check dist/*
-
-      - name: Verify package contents
         run: |
-          echo "Package contents:"
-          ls -la dist/
-          echo "Package metadata:"
-          python -c "import turkish_tokenizer; print(f'Version: {turkish_tokenizer.__version__}')"
+          twine check dist/*
 
-      - name: Publish to PyPI
+      - name: Upload package to PyPI
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: twine upload dist/*
+        run: |
+          twine upload dist/*
