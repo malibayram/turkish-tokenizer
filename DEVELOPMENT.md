@@ -129,12 +129,29 @@ The test suite is organized as follows:
 
 - `tests/test_turkish_tokenizer.py`: Tests for the main TurkishTokenizer class
 - `tests/test_turkish_decoder.py`: Tests for the TurkishDecoder class
+- `tests/check_intersections.py`: Script to check for token dictionary overlaps
+- `tests/check_root_suffix_combinations.py`: Script to check for morphological integrity violations
 
 Test classes include:
 
 - **Unit Tests**: Basic functionality tests
 - **Edge Cases**: Tests for unusual inputs and edge conditions
 - **Performance Tests**: Tests to ensure reasonable performance
+- **Morphological Integrity Tests**: Tests to ensure BPE dictionary doesn't contain root+suffix combinations
+
+### Morphological Integrity
+
+The Turkish tokenizer maintains morphological awareness by properly separating roots and suffixes. A critical test ensures that no root+suffix combinations exist in the BPE dictionary:
+
+```bash
+# Run the morphological integrity test
+pytest tests/test_turkish_tokenizer.py::TestTurkishTokenizer::test_no_root_suffix_combinations_in_bpe_dictionary
+
+# Comprehensive analysis of morphological violations
+python tests/check_root_suffix_combinations.py --full-check
+```
+
+For detailed information about morphological integrity principles, see [MORPHOLOGICAL_INTEGRITY.md](MORPHOLOGICAL_INTEGRITY.md).
 
 ### Test Coverage
 

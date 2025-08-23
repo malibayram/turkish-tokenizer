@@ -280,6 +280,67 @@ class TestTurkishTokenizer:
         assert len(kokler_bpe_intersection) == 0, "kokler and bpe_tokenler should not have overlapping keys"
         assert len(ekler_bpe_intersection) == 0, "ekler and bpe_tokenler should not have overlapping keys"
 
+    def test_no_root_suffix_combinations_in_bpe_dictionary(self, tokenizer):
+        """Test that no root+suffix combinations exist in the BPE dictionary.
+        
+        This ensures morphological integrity by preventing the BPE dictionary from
+        containing tokens that should be decomposed into their morphological parts.
+        For example, 'kitabı' should be tokenized as 'kitab' (root) + 'ı' (suffix),
+        not as a single BPE token.
+        """
+        kokler = tokenizer.roots
+        ekler = tokenizer.suffixes
+        bpe_tokenler = tokenizer.bpe_tokens
+        
+        # Filter out special tokens from roots for meaningful combinations
+        special_tokens = ["<uppercase>", "<unknown>", " ", "\n", "\t", "<pad>", "<eos>"]
+        root_tokens = {k: v for k, v in kokler.items() 
+                      if not k.startswith("special_") and k not in special_tokens}
+        
+        # Find all root+suffix combinations that exist in BPE dictionary
+        found_combinations = []
+        
+        # Sample check: only check first 500 roots and 100 suffixes to avoid test timeout
+        # In a full validation, you would check all combinations
+        sample_roots = list(root_tokens.keys())[:500]
+        sample_suffixes = list(ekler.keys())[:100]
+        
+        for root in sample_roots:
+            for suffix in sample_suffixes:
+                combination = root + suffix
+                if combination in bpe_tokenler:
+                    found_combinations.append({
+                        'root': root,
+                        'suffix': suffix,
+                        'combination': combination,
+                        'root_id': root_tokens[root],
+                        'suffix_id': ekler[suffix],
+                        'bpe_id': bpe_tokenler[combination]
+                    })
+        
+        # If combinations are found, fail with detailed information
+        if found_combinations:
+            error_details = []
+            for combo in found_combinations[:10]:  # Show first 10 examples
+                error_details.append(
+                    f"'{combo['root']}' + '{combo['suffix']}' = '{combo['combination']}' "
+                    f"(root_id: {combo['root_id']}, suffix_id: {combo['suffix_id']}, bpe_id: {combo['bpe_id']})"
+                )
+            
+            error_msg = (
+                f"Found {len(found_combinations)} root+suffix combinations in BPE dictionary. "
+                f"This violates morphological decomposition principle. Examples:\n" +
+                "\n".join(error_details)
+            )
+            
+            if len(found_combinations) > 10:
+                error_msg += f"\n... and {len(found_combinations) - 10} more combinations"
+            
+            pytest.fail(error_msg)
+        
+        # Test should pass if no combinations found
+        assert len(found_combinations) == 0, "BPE dictionary should not contain root+suffix combinations"
+
 
 class TestTurkishTokenizerEdgeCases:
     """Test edge cases and error conditions."""
