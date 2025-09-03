@@ -171,7 +171,7 @@ class TurkishDecoder:
         token_id = ids[i]
         tokens = self.reverse_dict[token_id]
         
-        if i >= len(ids) - 2:
+        if i > len(ids) - 2:
             return tokens[0]
         
         next_token = self.reverse_dict[ids[i + 1]][0]
