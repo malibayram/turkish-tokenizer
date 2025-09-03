@@ -5,11 +5,19 @@
 *.swo
 .DS_Store
 
-# Build artifacts
-*.o
+# Rust build artifacts
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Python extension artifacts
 *.so
 *.dylib
 *.dll
+*.pyd
+
+# Build artifacts
+*.o
 *.exe
 
 # Debug files
@@ -22,14 +30,18 @@
 
 # Test artifacts
 coverage/
+coverage.xml
 
-
-# Python artifacts (if any Python scripts are used)
+# Python artifacts
 __pycache__/
 *.py[cod]
-*.so
+*.pyo
 .Python
 env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 build/
 develop-eggs/
 dist/
@@ -41,9 +53,37 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
+# PyO3/maturin specific
 *.pth
 .pypirc
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# Benchmark results
+/benches/target/
+
+# OS specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# pytest cache
+.pytest_cache/
+.coverage
+
+# mypy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json

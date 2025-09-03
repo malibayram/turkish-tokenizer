@@ -1,0 +1,27 @@
+[package]
+name = "turkish-tokenizer"
+version = "0.1.0"
+edition = "2021"
+description = "A high-performance Turkish language tokenizer for morphologically rich text processing"
+license = "MIT"
+authors = ["Turkish Tokenizer Team"]
+repository = "https://github.com/turkish-nlp/turkish-tokenizer"
+keywords = ["nlp", "tokenizer", "turkish", "morphology", "bpe"]
+categories = ["text-processing", "linguistics"]
+readme = "README_RUST.md"
+
+[lib]
+name = "turkish_tokenizer"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+pyo3 = { version = "0.22", features = ["extension-module"] }
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "tokenizer_bench"
+harness = false
